@@ -230,24 +230,6 @@
 		}
 
 		/**
-		 * Set username
-		 *
-		 * @param string $username
-		 *
-		 * @return User
-		 */
-		public function setUsername($username) {
-			$username = (string) $username;
-
-			$length = strlen($username);
-			if ($length >= 3 && $length <= 180) {
-				parent::setUsername($username);
-			}
-
-			return $this;
-		}
-
-		/**
 		 * Set password (encrypted)
 		 *
 		 * @param string $password
@@ -255,7 +237,7 @@
 		 * @return User
 		 */
 		public function setPassword($password) {
-			$username = (string) $password;
+			$email = (string) $password;
 
 			$length = strlen($password);
 			if ($length >= 3 && $length <= 255) {

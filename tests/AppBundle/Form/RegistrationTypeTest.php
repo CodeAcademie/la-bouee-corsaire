@@ -13,7 +13,6 @@
 
 			$form = $this->factory->create(LegacyFormHelper::getType('AppBundle\Form\RegistrationType'), $user);
 			$formData = array(
-				'username'      => 'bar',
 				'email'         => 'john@doe.com',
 				'plainPassword' => array(
 					'first'       => 'test',
@@ -30,7 +29,6 @@
 
 			$this->assertTrue($form->isSynchronized());
 			$this->assertSame($user, $form->getData());
-			$this->assertSame('bar', $user->getUsername());
 			$this->assertSame('john@doe.com', $user->getEmail());
 			$this->assertSame('test', $user->getPlainPassword());
 			$this->assertSame('John', $user->getName());
