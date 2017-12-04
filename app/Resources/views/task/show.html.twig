@@ -34,9 +34,14 @@
 
 								{% if task.user == user %}
 									<a href="{{ path('task_edit', {'id': task.id}) }}" data-original-title="Edition"
-									 data-toggle="tooltip" type="button" class="btn btn-md btn-warning">
+									 data-toggle="tooltip" type="button" class="btn btn-md btn-warning btn-edit-duplicate">
 										<i class="glyphicon glyphicon-edit"></i>
-										Édition
+										Éditer
+									</a>
+									<a href="{{ path('task_duplicate', {'id': task.id}) }}" data-original-title="Edition"
+									 data-toggle="tooltip" type="button" class="btn btn-md btn-warning btn-edit-duplicate">
+										<i class="glyphicon glyphicon-edit"></i>
+										Dupliquer
 									</a>
 								{% endif %}
 
@@ -70,6 +75,6 @@
 		</div>
 	</div>
 
-	<p><a href="{{ path('task_list') }}">Retour à la liste des Besoins</a></p>
+	<p style="text-align: center"><a href="{{ path('task_list') }}">Retour à la liste</a></p>
 
 {% endblock %}

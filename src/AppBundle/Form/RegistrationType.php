@@ -18,9 +18,10 @@
 		public function buildForm(FormBuilderInterface $builder, array $options) {
 			parent::buildForm($builder, $options);
 			$builder
-				->add('username', null, array(
+				->remove('username')
+				->add('email', null, array(
 					'translation_domain' => 'FOSUserBundle',
-					'label' => 'form.username',
+					'label' => 'form.email',
 				))
 				->add('plainPassword', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\RepeatedType'), array(
 					'type' => LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\PasswordType'),

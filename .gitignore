@@ -13,8 +13,9 @@
 !/var/sessions
 /var/sessions/*
 !var/sessions/.gitkeep
-!var/SymfonyRequirements.php
+var/SymfonyRequirements.php
 /vendor/
 /web/api/
 /web/bundles/
 /web/config.php
+composer.lock

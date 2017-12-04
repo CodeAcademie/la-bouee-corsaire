@@ -4,10 +4,12 @@
 
 	use AppBundle\Entity\Task;
 	use AppBundle\Entity\User;
+	use AppBundle\Entity\StatusTrait;
 	use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 	use Symfony\Component\HttpFoundation\RedirectResponse;
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response;
+	use Psr\Log\LoggerInterface;
 
 	/**
 	 * Task-related operations
@@ -107,6 +109,40 @@
 			]);
 		}
 
+
+		/**
+		 * Show a form allowing creation of a new Demand owned by the current User
+		 *
+		 * @Route("/new/demand", name="task_new_demand")
+		 *
+		 * @param Request $request
+		 *
+		 * @return Response
+		 */
+		public function newDemand(Request $request) {
+
+			$user = $this->getAuthenticatedUser();
+
+			$formFactory = $this->get('form.factory');
+
+			$task = new Task;
+			$form = $formFactory->createNamed(
+				'new_task',
+				'AppBundle\Form\DemandType',
+				$task
+			);
+
+			$form->handleRequest($request);
+			if ($form->isSubmitted() && $form->isValid()) {
+				return $this->saveTask($form->getData());
+			}
+
+			return $this->render('task/new-demand.html.twig', [
+				'form' => $form->createView(),
+				'task' => $task,
+			]);
+		}
+
 		/**
 		 * Show full list of Tasks
 		 *
@@ -119,12 +155,78 @@
 				->getDoctrine()
 				->getRepository('AppBundle:Task')
 				->findBy(
-					['enabled' => true],
+					['isService' => false, 'enabled' => true],
+					['date' => 'DESC']
+				);
+			$demands = $this
+				->getDoctrine()
+				->getRepository('AppBundle:Task')
+				->findBy(
+					['enabled' => true, 'isService' => true],
 					['date' => 'DESC']
 				);
 
 			return $this->render('task/list.html.twig', [
 				'tasks' => $tasks,
+				'demands' => $demands,
+				'user' => $this->getUser(),
+			]);
+		}
+
+		/**
+		 * Show list of Tasks with range limitation
+		 *
+		 * @Route("/list/{range}", name="task_list_range")
+		 *
+		 * @return Response
+		 */
+		public function listRangeAction(Request $request, $range) {
+
+			$user = $this->getAuthenticatedUser();
+			$userLat = $user->getLatitude();
+			$userLong = $user->getLongitude();
+
+			$CIRCONF = 40075017; // circonférence de la terre en mètres*
+			$latDiff =  360 * $range / $CIRCONF;
+			$longDiff = 360 * $range / ($CIRCONF * cos(deg2rad($userLat)));
+			$latMin = $userLat - $latDiff;
+			$latMax = $userLat + $latDiff;
+			var_dump($longDiff);
+/*
+			$repository = $this->getDoctrine()->getRepository('AppBundle:Task');
+			$query = $repository->createQueryBuilder('p')
+			    ->where('p.latitude > :latMin')
+			    ->andWhere('p.latitude < :latMax')
+			    ->andWhere('p.longitude > :longMin')
+			    ->andWhere('p.longitude < :longMax')
+			    ->setParameter('latMin', $latMin)
+			    ->setParameter('latMax', $latMax)
+			    ->setParameter('longMin', $longMin)
+			    ->setParameter('longMax', $LongMax)
+			    ->orderBy('p.price', 'ASC')
+			    ->getQuery();
+
+			$task = $query->getResult();
+*/
+
+			$tasks = $this
+				->getDoctrine()
+				->getRepository('AppBundle:Task')
+				->findBy(
+					['isService' => false, 'enabled' => true],
+					['date' => 'DESC']
+				);
+			$demands = $this
+				->getDoctrine()
+				->getRepository('AppBundle:Task')
+				->findBy(
+					['enabled' => true, 'isService' => true],
+					['date' => 'DESC']
+				);
+
+			return $this->render('task/list.html.twig', [
+				'tasks' => $tasks,
+				'demands' => $demands,
 				'user' => $this->getUser(),
 			]);
 		}
@@ -143,7 +245,7 @@
 				->getDoctrine()
 				->getRepository('AppBundle:Task')
 				->findBy(
-					['user' => $user],
+					['user' => $user, 'isService' => false],
 					['date' => 'DESC']
 				);
 
@@ -159,9 +261,31 @@
 				}
 			}
 
+			$demands = $this
+				->getDoctrine()
+				->getRepository('AppBundle:Task')
+				->findBy(
+					['user' => $user, 'isService' => true],
+					['date' => 'DESC']
+				);
+
+				$demands_enabled = [];
+				$demands_disabled = [];
+
+			foreach ($demands as $demand) {
+				if ($demand->isDisabled()) {
+					$demands_disabled[] = $demand;
+				}
+				else {
+					$demands_enabled[] = $demand;
+				}
+			}
+
 			return $this->render('task/list-owned.html.twig', [
 				'tasks_enabled'  => $list_enabled,
 				'tasks_disabled' => $list_disabled,
+				'demands_enabled' => $demands_enabled,
+				'demands_disabled' => $demands_disabled,
 				'user'           => $user,
 			]);
 		}
@@ -195,6 +319,50 @@
 
 			return $this->render('task/edit.html.twig', [
 				'form' => $form->createView(),
+				'task' => $task
+			]);
+		}
+
+		/**
+		 * Show a form allowing duplication of the Task identified by the given ID
+		 *
+		 * @Route("/duplicate/{id}", name="task_duplicate")
+		 *
+		 * @param Request $request
+		 * @param int     $id
+		 *
+		 * @return Response
+		 */
+		public function duplicateAction(Request $request, $id) {
+			$user = $this->getAuthenticatedUser();
+			$task = $this->getById('Task', $id, false);
+			$this->checkOwnership($task);
+
+			$duplicated_task = $task->duplicate();
+			$duplicated_task->setEnabled(true);
+			$formFactory = $this->get('form.factory');
+			if ($duplicated_task->getIsService() == 0){
+				$form = $formFactory->createNamed(
+					'new_task',
+					'AppBundle\Form\TaskType',
+					$duplicated_task
+				);
+			} else {
+				$form = $formFactory->createNamed(
+					'new_task',
+					'AppBundle\Form\DemandType',
+					$duplicated_task
+				);
+			}
+
+			$form->handleRequest($request);
+			if ($form->isSubmitted() && $form->isValid()) {
+
+				return $this->saveTask($form->getData());
+			}
+
+			return $this->render('task/duplicate.html.twig', [
+				'form' => $form->createView(),
 				'task' => $task,
 			]);
 		}
@@ -217,10 +385,12 @@
 			$task->disable();
 			$this->getDoctrine()->getManager()->flush();
 
-			//TODO task disabling confirmation page
-			return new Response(
-				'<p>Task with id '.$task->getId().' has been disabled.</p>'
+			$this->addFlash(
+				'notice',
+				'La tâche ' . $task->getTitle() . ' a été désactivée.'
 			);
+
+			return $this->redirectToRoute('task_list_owned');
 		}
 
 		/**
@@ -245,6 +415,8 @@
 				'id' => $id
 			]);
 		}
+
+
 
 	}
 

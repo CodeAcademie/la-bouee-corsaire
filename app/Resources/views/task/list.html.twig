@@ -4,9 +4,13 @@
 
 {% block body %}
 
-	<h1>{{ block('title') }}</h1>
+    <div class="show-items">
+		<span class="show-base-item active">Liste des besoins</span>
+		<span class="show-items-divider">|</span>
+		<span class="show-second-item">Liste des services</span>
+	</div>
 
-	<div class="row">
+    <div class="row" id="base-item" >
 
 		<div class="col-lg-12">
 			<p>
@@ -39,5 +43,48 @@
 		{% endfor %}
 
 	</div>
+
+    <div class="row" id="second-item">
+
+		<div class="col-lg-12">
+			<p>
+				<a class="btn btn-default" href="{{ path('task_new_demand') }}">
+					Poster un nouveau service
+				</a>
+			</p>
+		</div>
+
+		{% for demand in demands %}
+
+			{% if demand.user == user %}
+				{% set panel_class = 'panel-info' %}
+			{% else %}
+				{% set panel_class = 'panel-default' %}
+			{% endif %}
+
+			<div class="col-lg-3 col-md-4 col-sm-6">
+				<div class="panel {{panel_class}}">
+					<div class="panel-heading">
+						<a href="{{ path('task_show', {'id': demand.id}) }}">{{ demand.title }}</a>
+					</div>
+					<div class="panel-body">
+						<p>{{ demand.location }}</p>
+						<p>{{ demand.description }}</p>
+					</div>
+				</div>
+			</div>
+
+		{% endfor %}
+
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+	{{ parent() }}
+	<script src="{{ asset('js/jquery.min.js') }}"></script>
+	<script src="{{ asset('js/jquery-ui.js') }}"></script>
+	<script src="{{ asset('js/login.js') }}"></script>
 
 {% endblock %}

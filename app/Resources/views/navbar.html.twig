@@ -15,16 +15,26 @@
 	</div>
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		<ul class="nav navbar-nav navbar-right">
-			<li>
+			<li class="dropdown">
 				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 					{% if is_granted('ROLE_ADMIN') %}
 						<a class="btn btn-primary btn-lg" href="{{ path('admin_home') }}">
 							Panneau d’administration
 						</a>
 					{% else %}
-						<a class="btn btn-primary btn-lg" href="{{ path('fos_user_profile_show') }}">
-							Mon Profil
+						<a class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" role="button" arial-expanded="false" href="{{ path('fos_user_profile_show') }}">
+							{{ app.user.name }} 
+							<span class="caret"></span>
 						</a>
+						<ul class="dropdown-menu">
+							<a class="btn btn-lg"  href="{{ path('fos_user_profile_show') }}">Mon profil</a>
+							<a class="btn btn-lg" href="{{ path('task_list_owned') }}">Mes besoins</a>
+							<a class="btn btn-lg" href="{{ path('transaction_list') }}">Mes transactions</a>
+							<a href="{{ logout_path() }}" data-original-title="Deconnexion" data-toggle="tooltip" type="button" class="btn btn-lg">
+								<i class="glyphicon glyphicon-log-out"></i>
+								Déconnexion
+							</a>
+						</ul>
 					{% endif %}
 				{% else %}
 					<a class="btn btn-primary btn-lg" href="{{ path('user_login') }}">

@@ -54,6 +54,209 @@ body {
 	.navbar-brand:hover {
 		color: $input_border;
 	}
+	.navbar-nav > li {
+		display: flex;
+	}
+	.navbar-nav > li > a {
+		color: $input_border;
+	}
+	.btn-primary {
+		background-color: transparent;
+		border-color: transparent;
+	}
+}
+/*----Besoins//Services en-cours -----*/
+.besoin{
+	h2{
+			color: #3386D2;
+			margin-top: 25px;
+    margin-bottom: 25px;
+	}
+	.thumbnail{
+		border: 2px solid #dddddd;
+	}
+	a.thumbnail:hover{
+		text-decoration: none;
+	}
+	h3{
+		font-weight: bold;
+	}
+}
+/*----------Explications-------------*/
+.example {
+    padding-top: 25px;
+
+    .row {
+      padding-bottom: 2em;
+    }
+
+    h2 {
+        margin-bottom: 25px;
+				color: #3386D2;
+    }
+
+    .col-md-3 img {
+        width: 50%;
+    }
+
+    p{
+      margin-bottom: 2em;
+    }
+}
+
+/*----------FOOTER------------------*/
+
+// footer position
+.container-fluid {
+	position: relative;
+	min-height: 100vh;
+}
+.content-row {
+	// footer height
+	margin-bottom: 30px;
+	@media screen and (max-width: 991px) {
+		margin-bottom: 90px;
+	}
+}
+.footer-row {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+footer{
+  background-color:$navbar_fond;
+  padding-bottom: 0;
+
+h3{
+  color: #337ab7;
+  font-size: 20px;
+  font-weight:400;
+}
+a:hover, a:focus{
+	text-decoration: none;
+}
+  ul, ul h3 a{
+    list-style-type: none;
+    color:$text_color;
+  }
+  ul li a{
+    color: $text_color;
+    text-decoration: none;
+  }
+  ul li a:hover{
+    color: $text_color;
+  }
+  input[type="text"],input[type="mail"]{
+    margin-bottom: 0.5em;
+    height: 34px;
+    width: 65%;
+  }
+
+  input.form-control{
+    margin-left: 60px;
+  }
+  button.btn{
+    width: 65%;
+		margin-left: 60px;
+  }
+
+}
+/*--------Liste des tâches---------------------*/
+.panel {
+	word-wrap: break-word;
+	min-height: 193px;
+}
+
+/* Base and secondary items */
+
+.show-items {
+	padding-top: 40px;
+	font-size: 2em;
+	color: #000;
+	line-height: 26px;
+	text-align: center;
+}
+.show-base-item,
+.show-items-divider,
+.show-second-item {
+	opacity: 0.6;
+}
+.show-base-item,
+.show-second-item {
+	cursor: pointer;
+	-o-transition: all .3s;
+	-moz-transition: all .3s;
+	-webkit-transition: all .3s;
+	-ms-transition: all .3s;
+	transition: all .3s;
+}
+.show-base-item.active,
+.show-second-item.active,
+.show-base-item:hover,
+.show-second-item:hover {
+	opacity: 1;
+}
+
+#second-item {
+	display: none;
+}
+/* global colors */
+$navbar_fond: #fff;
+$input_border:#19b9e7;
+$text_color: #000;
+
+/* default value for box-shadow */
+$shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+
+/* background image for top part of home page */
+$home-background: url('../images/colleagues.jpg');
+
+/* search bar on home page */
+.home-search {
+	background-image: $home-background;
+	height: 75vh;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+body {
+	background-color: #eee;
+	font-family: 'PT Sans', sans-serif;
+}
+
+/* top navigation bar */
+.navbar-default{
+	margin-bottom: 0;
+	background-color: $navbar_fond;
+	border-radius: 0;
+	border:none;
+	box-shadow: $shadow;
+	.navbar-toggle {
+		background-color: $input_border;
+	}
+	.navbar-toggle .icon-bar {
+		background-color: $navbar_fond;
+	}
+	.navbar-brand {
+		color: $text_color;
+		font-weight: 400;
+		img {
+			display: inline-block;
+		}
+		a {
+			text-decoration: none;
+			color: $text-color;
+		}
+	}
+	.navbar-brand:hover {
+		color: $input_border;
+	}
 	.navbar-nav > li > a {
 		color: $input_border;
 	}
@@ -197,4 +400,9 @@ a:hover, a:focus{
 
 .register-form {
 	display: none;
+}
+
+.btn-edit-duplicate {
+	width: 100%;
+	margin-bottom: 6px;
 }

@@ -5,6 +5,8 @@
 	use Symfony\Component\Form\AbstractType;
 	use Symfony\Component\Form\FormBuilderInterface;
 	use FOS\UserBundle\Util\LegacyFormHelper;
+	use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+	use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 	/**
 	 * Base used by all forms related to Users creation/edition
@@ -50,21 +52,41 @@
 					'translation_domain' => 'FOSUserBundle',
 					'label' => 'form.email',
 				])
+				->add('sponsor', null, [
+					'attr' => ['readonly' => true],
+					'translation_domain' => false,
+					'label' => 'Parrain',
+				])
 				->add('adress', null, [
 					'translation_domain' => false,
 					'label' => 'Adresse',
 				])
 				->add('region', null, [
+					'attr' => ['readonly' => true],
 					'translation_domain' => false,
 					'label' => 'Région',
 				])
+				->add('zip_code', null, [
+					'attr' => ['readonly' => true],
+					'translation_domain' => false,
+					'label' => 'Code Postal',
+					])
 				->add('city', null, [
+					'attr' => ['readonly'=> true],
 					'translation_domain' => false,
 					'label' => 'Ville',
 				])
 				->add('phone', null, [
 					'translation_domain' => false,
-					'label' => 'Téléphone (optionnel)',
+					'label' => 'Téléphone',
+				])
+				->add('latitude', HiddenType::class, [
+					'translation_domain' => false,
+					'label' => 'Latitude',
+				])
+				->add('longitude', HiddenType::class, [
+					'translation_domain' => false,
+					'label' => 'Longitude',
 				]);
 			}
 

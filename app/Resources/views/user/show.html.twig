@@ -22,10 +22,6 @@
 
 			<div class="panel panel-info fos_user_user_show">
 
-				<div class="panel-heading">
-					<h1 class="panel-title text-center">{{ user.username | upper}}</h1>
-				</div>
-
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-3" align="center">
@@ -65,12 +61,20 @@
 										<td>{{ user.city }}</td>
 									</tr>
 									<tr>
+										<td><label>Code Postal</label></td>
+										<td>{{ user.zipcode }}</td>
+									</tr>
+									<tr>
 										<td><label>Téléphone</label></td>
 										<td>{{ user.phone }}</td>
 									</tr>
 									<tr>
 										<td><label>Solde</label></td>
 										<td>{{ user.hours }}h</td>
+									</tr>
+									<tr>
+										<td><label>Parrain</label></td>
+										<td>{{ user.sponsor }}</td>
 									</tr>
 									<tr>
 										<td><label>Dernière connexion</label></td>

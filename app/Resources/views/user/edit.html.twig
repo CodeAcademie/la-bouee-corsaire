@@ -94,9 +94,25 @@
 											</td>
 										</tr>
 										<tr>
+											<td>{{ form_label(form.zip_code) }}</td>
+											<td>
+												{{ form_widget(form.zip_code, {'attr': {
+													'class': 'form-control'
+												}}) }}
+											</td>
+										</tr>
+										<tr>
 											<td>{{ form_label(form.phone) }}</td>
 											<td>
 												{{ form_widget(form.phone, {'attr': {
+													'class': 'form-control'
+												}}) }}
+											</td>
+										</tr>
+										<tr>
+											<td>{{ form_label(form.sponsor) }}</td>
+											<td>
+												{{ form_widget(form.sponsor, {'attr': {
 													'class': 'form-control'
 												}}) }}
 											</td>

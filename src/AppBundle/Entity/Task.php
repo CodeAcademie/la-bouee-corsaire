@@ -108,6 +108,16 @@
 		protected $date;
 
 		/**
+		 * Status (true -> Services / false -> Besoins)
+		 *
+		 * @ORM\Column(type="boolean")
+		 *
+		 * @var    boolean
+		 * @access protected
+		 */
+		protected $isService = true;
+
+		/**
 		 * Required level of expertise
 		 *
 		 * @ORM\Column(type="TaskLevelType", nullable=false, options={"default"="0"})
@@ -166,6 +176,15 @@
 		 * @return string
 		 */
 		public function getLevel() { return $this->level; }
+
+
+		/**
+		 * Return type of service (Besoins/Services)
+		 *
+		 * @return string
+		 */
+		public function getIsService() { return $this->isService; }
+
 
 		/**
 		 * Set description
@@ -262,6 +281,17 @@
 
 			return $this;
 		}
+		/**
+		 * Set type of Service (Besoins/Service)
+		 *
+		 * @param string
+		 *
+		 * @return Task
+		 */
+		public function setIsService($isService) {
+			$this->isService = $isService;
+			return $this;
+		}
 
 		/**
 		 * Build a new Task instance from parameters given in an array
@@ -281,6 +311,23 @@
 			return $task;
 		}
 
+		/**
+		 * Build a new Task instance based on existing one
+		 *
+		 * Remove ID and date from previous Task
+		 *
+		 * @return Task
+		*/
+		public function duplicate(){
+			$task = new Task();
+			$task->setUser($this->getUser())
+				->setTitle($this->getTitle())
+				->setDescription($this->getDescription())
+				->setLocation($this->getLocation())
+				->setLevel($this->getLevel())
+				->setIsService($this->getIsService());
+			return $task;
+		}
 	}
 
 ?>

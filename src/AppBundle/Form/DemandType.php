@@ -11,7 +11,7 @@
 	/**
 	 * Form used to generate and edit Tasks
 	 */
-	class TaskType extends AbstractType {
+	class DemandType extends AbstractType {
 
 		/**
 		 * Associated class
@@ -57,7 +57,7 @@
 					'label' => 'Informations complémentaires',
 				])
 				->add('is_service', HiddenType::class, [
-					'data' => 0
+					'data' => 1
 				]);
 		}
 

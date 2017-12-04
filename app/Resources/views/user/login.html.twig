@@ -22,14 +22,14 @@
 		<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 	{% endif %}
 
-	<div class="show-forms">
-		<span class="show-login-form active">Connexion</span>
-		<span class="show-forms-divider">/</span>
-		<span class="show-register-form">Inscription</span>
+	<div class="show-items">
+		<span class="show-base-item active">Connexion</span>
+		<span class="show-items-divider">|</span>
+		<span class="show-second-item">Inscription</span>
 	</div>
 
 	<form action="{{ path("fos_user_security_check") }}" method="post"
-		class="l-form login-form"
+		class="l-form login-form" id="base-item"
 	>
 
 		{% if csrf_token %}
@@ -52,12 +52,13 @@
 								<img alt="avatar" src="{{ asset('images/man.png') }}"
 								 class="avatar img-circle img-responsive">
 							</div>
+							<div id='alert' class="alert-danger"></div>
 							<div class="col-md-9">
 								<table class="table table-user-information">
 									<tbody>
 										<tr>
 											<td>
-												<label for="username">{{ 'security.login.username'|trans }}</label>
+												<label for="email">{{ 'profile.show.email'|trans }}</label>
 											</td>
 											<td>
 												<input class="form-control" type="text" id="username" name="_username" value="" required="required" />
@@ -93,7 +94,7 @@
 	</form>
 
 	{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {
-		'class': 'fos_user_registration_register r-form register-form'
+		'class': 'fos_user_registration_register r-form register-form', 'id' : 'second-item'
 	}}) }}
 
 		<div class="row">
@@ -104,7 +105,6 @@
 
 					<div class="panel-heading">
 						<h1 class="panel-title text-center">Inscription</h1>
-						{{ form_errors(form.username) }}
 						{{ form_errors(form.email) }}
 						{{ form_errors(form.plainPassword.first) }}
 						{{ form_errors(form.plainPassword.second) }}
@@ -122,19 +122,10 @@
 								<img alt="avatar" src="{{ asset('images/man.png') }}"
 								 class="avatar img-circle img-responsive">
 							</div>
+							<div id="alert_form_registration" class="alert alert-danger" style="display: none"></div>
 							<div class="col-md-9">
 								<table class="table table-user-information">
 									<tbody>
-										<tr class="step-0">
-											<td>
-												{{ form_label(form.username) }}
-											</td>
-											<td>
-												{{ form_widget(form.username, {'attr': {
-													'class': 'form-control'
-												}}) }}
-											</td>
-										</tr>
 										<tr class="step-0">
 											<td>
 												{{ form_label(form.email) }}
@@ -161,6 +152,16 @@
 											</td>
 											<td>
 												{{ form_widget(form.plainPassword.second, {'attr': {
+													'class': 'form-control'
+												}}) }}
+											</td>
+										</tr>
+										<tr class="step-0">
+											<td>
+												{{ form_label(form.sponsor) }}
+											</td>
+											<td>
+												{{ form_widget(form.sponsor, {'attr': {
 													'class': 'form-control'
 												}}) }}
 											</td>
@@ -206,6 +207,16 @@
 											</td>
 										</tr>
 										<tr class="step-2" style="display: none;">
+										<td>
+											{{ form_label(form.zip_code) }}
+										</td>
+										<td>
+											{{ form_widget(form.zip_code,{'attr': {
+												'class': 'form-control'
+											}}) }}
+										</td>
+										</tr>
+										<tr class="step-2" style="display: none;">
 											<td>
 												{{ form_label(form.city) }}
 											</td>
@@ -248,7 +259,8 @@
 {% block javascripts %}
 
 	{{ parent() }}
-
+	<script src="{{ asset('js/jquery.min.js') }}"></script>
+	<script src="{{ asset('js/jquery-ui.js') }}"></script>
 	<script src="{{ asset('js/login.js') }}"></script>
 
 {% endblock %}
