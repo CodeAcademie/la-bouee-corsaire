@@ -24,8 +24,8 @@
 
 				<div class="panel-heading">
 					<h1 class="panel-title text-center">
-						Message envoyé à {{ message.dest }}
-						par {{ message.author }}
+						Message envoyé à {{ message.author.getProperName }}
+						par {{ message.dest.getProperName  }}
 						le {{ message.date.format('j/m/Y à G:i') }}
 						au sujet de <a href="{{ path('task_show', {'id': message.transaction.task.id}) }}">
 							{{ message.transaction.task.title }}

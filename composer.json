@@ -30,7 +30,7 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
         "twbs/bootstrap": "^3.3",
-        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "friendsofsymfony/user-bundle": "^2.0",
         "fresh/doctrine-enum-bundle": "^4.8|^5.0",
         "symfony/assetic-bundle": "^2.8",
         "leafo/scssphp": "^0.6.6",

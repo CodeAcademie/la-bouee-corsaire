@@ -31,7 +31,7 @@
 							}}) }}
 						</h1>
 						{{ form_errors(form.title) }}
-						{{ form_errors(form.location) }}
+						{{ form_errors(form.address) }}
 						{{ form_errors(form.level) }}
 						{{ form_errors(form.description) }}
 					</div>
@@ -46,9 +46,9 @@
 								<table class="table table-user-information">
 									<tbody>
 										<tr>
-											<td>{{ form_label(form.location) }}</td>
+											<td>{{ form_label(form.address) }}</td>
 											<td>
-												{{ form_widget(form.location, {'attr': {
+												{{ form_widget(form.address, {'attr': {
 													'class': 'form-control'
 												}}) }}
 											</td>

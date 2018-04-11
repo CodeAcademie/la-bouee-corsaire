@@ -47,7 +47,7 @@
 		 * @access protected
 		 */
 		protected $date;
-		
+
 		/**
 		 * User who sent the Message
 		 *
@@ -124,7 +124,10 @@
 		 *
 		 * @return User
 		 */
-		public function getAuthor() { return $this->author; }
+		public function getAuthor()
+		{
+			return $this->author;
+		}
 
 		/**
 		 * Return recipient
@@ -258,7 +261,6 @@
 			}
 			return $message;
 		}
-
 	}
 
 ?>

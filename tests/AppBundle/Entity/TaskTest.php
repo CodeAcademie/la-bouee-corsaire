@@ -83,6 +83,17 @@
 			$this->assertSame(TaskLevelType::EXPERT, $task->getLevel());
 		}
 
+		public function testIsService() {
+			$task = $this->getTask();
+			$this->assertFalse($task->isService());
+
+			$task->setIsService(true);
+			$this->assertTrue($task->getIsService());
+
+			$task->setIsService(false);
+			$this->assertFalse($task->getIsService());
+		}
+
 	}
 
 ?>

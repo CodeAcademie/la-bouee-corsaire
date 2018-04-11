@@ -68,24 +68,15 @@
 		 */
 		protected $description;
 
+
 		/**
-		 * Location (region or city)
-		 *
-		 * @ORM\Column(type="string", length=100)
-		 *
-		 * @Assert\NotBlank(message="Veuillez entrer une localisation.")
-		 *
-		 * @Assert\Length(
-		 * 	min=3,
-		 * 	max=100,
-		 * 	minMessage="La localisation est trop courte.",
-		 * 	maxMessage="La localisation est trop longue.",
-		 * )
-		 *
-		 * @var    string
-		 * @access protected
-		 */
-		protected $location;
+	     * @ORM\ManyToOne(targetEntity="Address")
+	     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+	     *
+	     * @var int
+	     * @access protected
+	     */
+	    protected $address;
 
 		/**
 		 * Owner
@@ -155,6 +146,14 @@
 		 * @return string
 		 */
 		public function getLocation() { return $this->location; }
+
+		/**
+		 * Return list of address of user
+		 *
+		 * @return array
+		 */
+		public function getAddress() { return $this->address; }
+
 
 		/**
 		 * Return owner
@@ -236,6 +235,19 @@
 			if ($length >= 3 && $length <= 100) {
 				$this->location = $location;
 			}
+
+			return $this;
+		}
+
+		/**
+		 * Set address
+		 *
+		 * @param int
+		 *
+		 * @return Task
+		 */
+		public function setAddress($address_id) {
+			$this->address = $address_id;
 
 			return $this;
 		}

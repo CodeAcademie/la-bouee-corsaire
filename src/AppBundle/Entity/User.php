@@ -5,6 +5,9 @@
 	use Doctrine\ORM\Mapping as ORM;
 	use FOS\UserBundle\Model\User as BaseUser;
 	use Symfony\Component\Validator\Constraints as Assert;
+
+	use Doctrine\Common\Collections\Collection;
+	use Doctrine\Common\Collections\ArrayCollection;
 	/**
 	 * Registered Users
 	 *
@@ -24,6 +27,16 @@
 		 * @access protected
 		 */
 		protected $id;
+
+		/**
+	     * Many Users have Many Address.
+	     * @ORM\ManyToMany(targetEntity="Address")
+	     * @ORM\JoinTable(name="bouee_users_addresses",
+	     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+	     *      inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id")}
+	     *      )
+	     */
+	    private $addresses;
 
 		/**
 		 * Name
@@ -233,6 +246,10 @@
 		 */
 		protected $sponsor;
 
+		public function __construct() {
+	        $this->addresses = new \Doctrine\Common\Collections\ArrayCollection();
+	    }
+
 		/**
 		 * Return name
 		 *
@@ -326,6 +343,28 @@
 		 */
 		public function getSponsor() {
 			return $this->sponsor;
+		}
+
+		/**
+		 * Return Addresses
+		 *
+		 * @return float
+		 */
+		public function getAddresses() {
+			return $this->addresses;
+		}
+
+		/** 
+		 * Return list of user's address
+		 * 
+		 * @return array of id with string of full addresses for key
+		 */
+		public function getListAddresses() {
+			$retour = [];
+			foreach ($this->addresses as $value) {
+				$retour[$value->getFullAddress()] = $value;
+			}
+			return $retour;
 		}
 
 		/**
@@ -604,6 +643,11 @@
 		 */
 		public function isDisabled() {
 			return (!$this->isEnabled());
+		}
+
+		public function getProperName()
+		{
+			return $this->getName() . ' ' . $this->getSurname()[0];
 		}
 
 	}

@@ -28,7 +28,7 @@
 
 				<div class="panel-heading">
 					<h1 class="panel-title text-center">
-						Contacter {{ message.dest }}
+						Contacter {{ message.dest.getProperName }}
 						au sujet de {{ message.transaction.task.title }}
 					</h1>
 						{{ form_errors(form.duration) }}

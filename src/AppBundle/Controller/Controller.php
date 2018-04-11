@@ -2,7 +2,8 @@
 
 	namespace AppBundle\Controller;
 
-	use AppBundle\Entity\User;
+	use AppBundle\Entity\User;	
+	use FOS\UserBundle\Event\FormEvent;
 	use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 
 	/**

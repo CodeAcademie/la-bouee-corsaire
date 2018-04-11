@@ -10,6 +10,10 @@
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response;
 	use Psr\Log\LoggerInterface;
+	use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+	use Symfony\Component\Form\Extension\Core\Type\TextType;
+	use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 	/**
 	 * Task-related operations
@@ -91,11 +95,15 @@
 
 			$formFactory = $this->get('form.factory');
 
+			$option['addresses'] = $user->getListAddresses();
+
+			//$option['addresses'] = [];
 			$task = new Task;
 			$form = $formFactory->createNamed(
 				'new_task',
 				'AppBundle\Form\TaskType',
-				$task
+				$task,
+				$option
 			);
 
 			$form->handleRequest($request);
@@ -125,11 +133,14 @@
 
 			$formFactory = $this->get('form.factory');
 
+			$option['addresses'] = $user->getListAddresses();
+
 			$task = new Task;
 			$form = $formFactory->createNamed(
 				'new_task',
 				'AppBundle\Form\DemandType',
-				$task
+				$task,
+				$option
 			);
 
 			$form->handleRequest($request);
@@ -150,25 +161,44 @@
 		 *
 		 * @return Response
 		 */
-		public function listAction() {
+		public function listAction()
+		{
 			$tasks = $this
 				->getDoctrine()
 				->getRepository('AppBundle:Task')
-				->findBy(
-					['isService' => false, 'enabled' => true],
-					['date' => 'DESC']
-				);
-			$demands = $this
-				->getDoctrine()
-				->getRepository('AppBundle:Task')
-				->findBy(
-					['enabled' => true, 'isService' => true],
+				->findBy(['enabled' => true],
 					['date' => 'DESC']
 				);
 
 			return $this->render('task/list.html.twig', [
 				'tasks' => $tasks,
-				'demands' => $demands,
+				'user' => $this->getUser(),
+			]);
+		}
+
+		/**
+		 * Search From nav
+		 *
+		 * @Route("/search", name="search_task_nav")
+		 *
+		 */
+
+		public function navSearch(Request $request)
+		{
+			$search = $request->request->get('search');
+			$em = $this->getDoctrine()->getManager();
+			$repository = $em->getRepository('AppBundle\Entity\Task');
+			$query = $repository->createQueryBuilder('p')
+				->where('p.title LIKE :word')
+				->orWhere('p.description LIKE :word')
+				->andWhere('p.enabled = :enabled')
+				->setParameter('word', '%'.$search.'%')
+				->setParameter('enabled', 1)
+				->getQuery();
+			$tasks = $query->getResult();
+
+			return $this->render('task/list.html.twig', [
+				'tasks' => $tasks,
 				'user' => $this->getUser(),
 			]);
 		}
@@ -186,12 +216,11 @@
 			$userLat = $user->getLatitude();
 			$userLong = $user->getLongitude();
 
-			$CIRCONF = 40075017; // circonférence de la terre en mètres*
+			$CIRCONF = 40075; // circonférence de la terre en mètres*
 			$latDiff =  360 * $range / $CIRCONF;
 			$longDiff = 360 * $range / ($CIRCONF * cos(deg2rad($userLat)));
 			$latMin = $userLat - $latDiff;
 			$latMax = $userLat + $latDiff;
-			var_dump($longDiff);
 /*
 			$repository = $this->getDoctrine()->getRepository('AppBundle:Task');
 			$query = $repository->createQueryBuilder('p')
@@ -206,14 +235,19 @@
 			    ->orderBy('p.price', 'ASC')
 			    ->getQuery();
 
-			$task = $query->getResult();
+			$list = $query->getResult();
+
+			foreach ($list as $key => $task) {
+				if($task['isService'])
+			}
+
 */
 
 			$tasks = $this
 				->getDoctrine()
 				->getRepository('AppBundle:Task')
 				->findBy(
-					['isService' => false, 'enabled' => true],
+					['enabled' => true],
 					['date' => 'DESC']
 				);
 			$demands = $this
@@ -305,11 +339,14 @@
 			$task = $this->getById('Task', $id);
 			$this->checkOwnership($task);
 
+			$option['addresses'] = $user->getListAddresses();
+
 			$formFactory = $this->get('form.factory');
 			$form = $formFactory->createNamed(
 				'edit_task',
 				'AppBundle\Form\TaskType',
-				$task
+				$task,
+				$option
 			);
 
 			$form->handleRequest($request);
@@ -338,6 +375,8 @@
 			$task = $this->getById('Task', $id, false);
 			$this->checkOwnership($task);
 
+			$option['addresses'] = $user->getListAddresses();
+
 			$duplicated_task = $task->duplicate();
 			$duplicated_task->setEnabled(true);
 			$formFactory = $this->get('form.factory');
@@ -345,13 +384,15 @@
 				$form = $formFactory->createNamed(
 					'new_task',
 					'AppBundle\Form\TaskType',
-					$duplicated_task
+					$duplicated_task,
+					$option
 				);
 			} else {
 				$form = $formFactory->createNamed(
 					'new_task',
 					'AppBundle\Form\DemandType',
-					$duplicated_task
+					$duplicated_task,
+					$option
 				);
 			}
 
@@ -415,6 +456,8 @@
 				'id' => $id
 			]);
 		}
+
+
 
 
 

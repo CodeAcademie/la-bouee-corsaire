@@ -4,9 +4,9 @@
 
 	use Symfony\Component\Form\AbstractType;
 	use Symfony\Component\Form\FormBuilderInterface;
-	use FOS\UserBundle\Util\LegacyFormHelper;
 	use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 	use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+	use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 	/**
 	 * Base used by all forms related to Users creation/edition
@@ -48,7 +48,7 @@
 					'translation_domain' => false,
 					'label' => 'Nom',
 				])
-				->add('email', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\EmailType'),[
+				->add('email', EmailType::class,[
 					'translation_domain' => 'FOSUserBundle',
 					'label' => 'form.email',
 				])

@@ -21,24 +21,28 @@
 		</div>
 
 		{% for task in tasks %}
+	
+			{% if not task.isService %}
 
-			{% if task.user == user %}
-				{% set panel_class = 'panel-info' %}
-			{% else %}
-				{% set panel_class = 'panel-default' %}
-			{% endif %}
+				{% if task.user == user %}
+					{% set panel_class = 'panel-info' %}
+				{% else %}
+					{% set panel_class = 'panel-default' %}
+				{% endif %}
 
-			<div class="col-lg-3 col-md-4 col-sm-6">
-				<div class="panel {{panel_class}}">
-					<div class="panel-heading">
-						<a href="{{ path('task_show', {'id': task.id}) }}">{{ task.title }}</a>
-					</div>
-					<div class="panel-body">
-						<p>{{ task.location }}</p>
-						<p>{{ task.description }}</p>
+				<div class="col-lg-3 col-md-4 col-sm-6">
+					<div class="panel {{panel_class}}">
+						<div class="panel-heading">
+							<a href="{{ path('task_show', {'id': task.id}) }}">{{ task.title }}</a>
+						</div>
+						<div class="panel-body">
+							<p>{{ task.address.getFullAddress() }}</p>
+							<p>{{ task.description }}</p>
+						</div>
 					</div>
 				</div>
-			</div>
+
+			{% endif %}
 
 		{% endfor %}
 
@@ -54,25 +58,29 @@
 			</p>
 		</div>
 
-		{% for demand in demands %}
+		{% for demand in tasks %}
 
-			{% if demand.user == user %}
-				{% set panel_class = 'panel-info' %}
-			{% else %}
-				{% set panel_class = 'panel-default' %}
-			{% endif %}
+			{% if demand.isService %}
 
-			<div class="col-lg-3 col-md-4 col-sm-6">
-				<div class="panel {{panel_class}}">
-					<div class="panel-heading">
-						<a href="{{ path('task_show', {'id': demand.id}) }}">{{ demand.title }}</a>
-					</div>
-					<div class="panel-body">
-						<p>{{ demand.location }}</p>
-						<p>{{ demand.description }}</p>
+				{% if demand.user == user %}
+					{% set panel_class = 'panel-info' %}
+				{% else %}
+					{% set panel_class = 'panel-default' %}
+				{% endif %}
+
+				<div class="col-lg-3 col-md-4 col-sm-6">
+					<div class="panel {{panel_class}}">
+						<div class="panel-heading">
+							<a href="{{ path('task_show', {'id': demand.id}) }}">{{ demand.title }}</a>
+						</div>
+						<div class="panel-body">
+							<p>{{ demand.address.getFullAddress() }}</p>
+							<p>{{ demand.description }}</p>
+						</div>
 					</div>
 				</div>
-			</div>
+
+			{% endif %}
 
 		{% endfor %}
 

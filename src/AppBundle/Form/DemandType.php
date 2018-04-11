@@ -6,6 +6,7 @@
 	use Symfony\Component\Form\FormBuilderInterface;
 	use Symfony\Component\OptionsResolver\OptionsResolver;
 	use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+	use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 	/**
@@ -39,14 +40,16 @@
 		 * @param array                $options The options
 		 */
 		public function buildForm(FormBuilderInterface $builder, array $options) {
+			$addresses = $options['addresses'];
 			$builder
 				->add('title', null, [
 					'translation_domain' => false,
 					'label' => 'Description',
 				])
-				->add('location', null, [
-					'translation_domain' => false,
-					'label' => 'Lieu',
+				->add('address', ChoiceType::class,[
+					'choices' => $addresses,
+					'placeholder' => 'Choissisez une adresse',
+					'label' => 'Adresse'
 				])
 				->add('level', null, [
 					'translation_domain' => false,
@@ -69,6 +72,7 @@
 		public function configureOptions(OptionsResolver $resolver) {
 			$resolver->setDefaults([
 				'data_class' => $this->class,
+				'addresses'  => [],
 			]);
 		}
 

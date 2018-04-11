@@ -4,7 +4,8 @@
 
 	use Symfony\Component\Form\FormBuilderInterface;
 	use Symfony\Component\OptionsResolver\OptionsResolver;
-	use FOS\UserBundle\Util\LegacyFormHelper;
+	use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+	use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 	use AppBundle\Form\UserType;
 
 	/**
@@ -23,8 +24,8 @@
 					'translation_domain' => 'FOSUserBundle',
 					'label' => 'form.email',
 				))
-				->add('plainPassword', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\RepeatedType'), array(
-					'type' => LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\PasswordType'),
+				->add('plainPassword', RepeatedType::class, array(
+					'type' => PasswordType::class,
 					'options' => array('translation_domain' => 'FOSUserBundle'),
 					'first_options' => array('label' => 'form.password'),
 					'second_options' => array('label' => 'form.password_confirmation'),

@@ -20,7 +20,7 @@
 					<div class="panel-body">
 						<p>Utilisateurs concernés :</p>
 						{% for user in transaction.users %}
-							<p>{{ user.username }}</p>
+							<p>{{ user.getProperName }}</p>
 						{% endfor %}
 					</div>
 				</div>
